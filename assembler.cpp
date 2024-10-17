@@ -6,54 +6,47 @@
 #include "assembler.h"
 #include "processor.h"
 
-void assembler(FILE* command)
+void assembler(FILE* command_txt)
 {
     fopen_m("command.asm", asmcommand, "a");
 
     char cmd[100] = " ";
+     int found_command = 0;
 
-    while (fscanf(command, "%s", cmd) == 1)
+    while (fscanf(command_txt, "%s", cmd) == 1)
     {
-
-        if (strcmp(cmd, "push") == 0)
+        if (COMPARE(cmd, "push", PUSH))
         {
-            fputs("1 ", asmcommand);
-
-            int arg = 0;
-
-            fscanf(command, "%d", &arg);
-            fprintf(asmcommand, "%d ", arg);
-
-        }
-        else if (strcmp(cmd, "add") == 0)
-        {
-            fputs("2 ", asmcommand);
+            ARGUMENT(command_txt, asmcommand);
+            found_command = 1;
         }
 
-        else if (strcmp(cmd, "pop") == 0)
+        if (COMPARE(cmd, "add", ADD))
+            found_command = 1;
+
+        if (COMPARE(cmd, "pop", POP))
+            found_command = 1;
+
+        if (COMPARE(cmd, "sub", SUB))
+            found_command = 1;
+
+        if (COMPARE(cmd, "jmp", JMP))
         {
-            fputs("3 ", asmcommand);
+            ARGUMENT(command_txt, asmcommand);
+            found_command = 1;
         }
 
-        else if (strcmp(cmd, "sub") == 0)
+        if (COMPARE(cmd, "mul", MUL))
+            found_command = 1;
+
+        if (COMPARE(cmd, "hlt", HLT))
+            found_command = 1;
+
+        if (!found_command)
         {
-            fputs("4 ", asmcommand);
+            printf("Unknown command: %s\n", cmd);
         }
 
-        else if (strcmp(cmd, "jmp") == 0)
-        {
-            fputs("0 ", asmcommand);
-        }
-
-        else if (strcmp(cmd, "mul") == 0)
-        {
-            fputs("5 ", asmcommand);
-        }
-
-        else if (strcmp(cmd, "hlt") == 0)
-        {
-            fputs("-666 ", asmcommand);
-        }
     }
 
     fclose(asmcommand);

@@ -1,5 +1,6 @@
 #ifndef PROCESSOR_H
 #define PROCESSOR_H
+#include "stack.h"
 
 enum Commands {
     JMP = 0,
